@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+		<!-- SyntaxHighlighter -->
+		<script type="text/javascript" src="src/shCore.js"></script>
+		<!-- <script type="text/javascript" src="src/shAutoloader.js"></script> -->
+		<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+		<script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+		<script type="text/javascript" src="scripts/shBrushCss.js"></script>
+		<script type="text/javascript" src="extra/html_format.js"></script>
+		<script type="text/javascript" src="extra/js_format.js"></script>
+		<script type="text/javascript" src="extra/css_beautify.js"></script>
+		<link type="text/css" rel="stylesheet" href="styles/shCore.css" />
+		<link type="text/css" rel="Stylesheet" href="styles/shCoreDefault.css" />
+		<link type="text/css" rel="Stylesheet" href="styles/shThemeDefault.css" />
+		<title>测试代码高亮</title>
+	</head>
+	<body>
+		<style id="css_code">
+			input {				line-height: 32px;				outline: none;				border: 1px solid violet;			}
+		</style>
+		<div id="ahri">
+			<div>					<p>							<input type="text">							<input type="number">
+							<input type="checkbox">							<button type="button">									普通按钮							</button>
+							<button type="reset">									重置按钮							</button>
+							<button type="submit">									提交按钮							</button>
+					</p>
+			</div>
+			<p>					<span>							<button type="button">									button							</button>
+					</span>					<span>							<button type="reset">									reset							</button>
+					</span>					<span>							<button type="submit">									submit							</button>
+					</span>
+			</p>
+		</div>
+		<div id="kurumi"></div>
+		<div id="leona"></div>
+		<div id="dianna"></div>
+		<div>
+			<h2>who's your daddy</h2>
+		</div>
+		
+		<script id="js_code">
+			function ahri() {				const map = new Map([					['?  ?', '你在教我做事？？'],
+					[new Array(5).fill('??'), '你不对劲']
+				]);				console.log(map.get('?  ?'));
+			}
+		</script>
+		
+		<script type="text/javascript">
+			format();
+			
+			
+			function format() {
+				html_code = document.getElementById('ahri').innerHTML.replace(/^\s+/, '');
+				tabsize = 2;	// 缩进位数
+				tabchar = ' ';	// 缩进方式为空格
+				if (tabsize == 1) {
+						tabchar = '\t';	// 缩进方式为tab
+				}
+				var pre = document.createElement('pre');
+				pre.className = "brush: html;"
+				if (html_code && html_code.charAt(0) === '<') {
+						pre.innerHTML = style_html(html_code, tabsize, tabchar, 80);
+				} else {
+						pre.innerHTML = js_beautify(html_code, tabsize, tabchar);
+				}
+				$(`#kurumi`).append(pre);
+				
+				js_code = document.getElementById('js_code').innerHTML.replace(/^\s+/, '');
+				var js_pre = document.createElement('pre');
+				js_pre.className = "brush: jscript;"
+				js_pre.innerHTML = js_beautify(js_code, tabsize, tabchar);
+				$('#leona').append(js_pre);
+				
+				var options = {
+					indent: '    ',	// 缩进使用空格或 \t（tab）
+					// openbrace: 'separate-line'	// 使用第一个{的时候是否换行
+				}
+				var css_code = document.getElementById('css_code').innerHTML.replace(/^\s+/, '');
+				var css_pre = document.createElement('pre');
+				css_pre.className = "brush: css;"
+				css_pre.innerHTML = cssbeautify(css_code, options);
+				$('#dianna').append(css_pre);
+				
+				// 禁止toolbar
+				Object.assign(SyntaxHighlighter.defaults, {
+					toolbar: false,	// 是否显示帮助的?按钮
+					'quick-code': false	// 是否双击后编辑代码
+				})
+				// 如果使用SyntaxHighlighter.all()无法出现代码高亮效果，就直接使用SyntaxHighlighter.highlight();
+				SyntaxHighlighter.all();
+			}
+		</script>
+	</body>
+</html>
